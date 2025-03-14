@@ -7,32 +7,32 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Install Dependencies') {
+
+        stage('Build') {
             steps {
+                sh 'echo "Building..."'
                 sh 'npm install'
             }
         }
-        stage('Build') {
+
+        stage('Test') {
             steps {
-                echo 'Build Stage - Node.js app ready!'
-            }
-        }
-        stage('Run Tests') {
-            steps {
+                sh 'echo "Running tests..."'
                 sh 'npm test'
             }
         }
     }
+
     post {
         success {
-            mail to: 'jjohnsonvettamv1790@conestogac.on.ca',
-                 subject: "✅ Success - ${currentBuild.fullDisplayName}",
-                 body: "Jenkins CI/CD pipeline passed!"
+            mail to: 'jjhonsonvettamv1790@conestogac.on.ca',
+                 subject: "SUCCESS: ${currentBuild.fullDisplayName}",
+                 body: "The Jenkins pipeline build succeeded!"
         }
         failure {
             mail to: 'jjohnsonvettamv1790@conestogac.on.ca',
-                 subject: "❌ Build Failed - ${currentBuild.fullDisplayName}",
-                 body: "Build failed. Please check the Jenkins logs."
+                 subject: "FAILURE: ${currentBuild.fullDisplayName}",
+                 body: "The Jenkins pipeline build failed!"
         }
     }
 }
